@@ -41,4 +41,38 @@ class LocalDatabaseCart {
         : [];
     return _list;
   }
+
+  insertProduct(CartModel cartModel) async {
+    Database _db = await database;
+
+    await _db.insert(
+      'cartProducts',
+      cartModel.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  deleteProduct(String productId) async {
+    Database _db = await database;
+    await _db.delete(
+      'cartProducts',
+      where: 'productId = ?',
+      whereArgs: [productId],
+    );
+  }
+
+  deleteAllProducts() async {
+    Database _db = await database;
+    await _db.delete('cartProducts');
+  }
+
+  update(CartModel cartModel) async {
+    Database _db = await database;
+    await _db.update(
+      'cartProducts',
+      cartModel.toJson(),
+      where: 'productId = ?',
+      whereArgs: [cartModel.productId],
+    );
+  }
 }
